@@ -34,6 +34,22 @@
     </div>
 </div>
 
+<div class="bg-white rounded shadow p-6 mb-6">
+    <h2 class="text-lg font-semibold mb-3">Anëtarët e Issue</h2>
+
+    <div id="members-list" class="flex flex-wrap gap-2 mb-4"></div>
+
+    <div class="flex gap-2">
+        <select id="member-select" class="border rounded px-3 py-2">
+            <option value="">Zgjidh një anëtar...</option>
+            @foreach ($allUsers as $user)
+                <option value="{{ $user->id }}">{{ $user->name }}</option>
+            @endforeach
+        </select>
+        <button id="add-member-btn" class="bg-indigo-600 text-white px-4 py-2 rounded">Shto anëtar</button>
+    </div>
+</div>
+
 {{-- KOMENTET (me AJAX) --}}
 <div class="bg-white rounded shadow p-6">
     <h2 class="text-lg font-semibold mb-3">Komentet</h2>
@@ -105,6 +121,50 @@
     });
 
     renderTags(@json($issue->tags));
+
+    // ---------- MEMBERS ----------
+    const membersList = document.getElementById('members-list');
+
+    function renderMembers(members) {
+        membersList.innerHTML = '';
+        if (members.length === 0) {
+            membersList.innerHTML = '<span class="text-gray-400 text-sm">Pa anëtarë.</span>';
+            return;
+        }
+        members.forEach(member => {
+            const span = document.createElement('span');
+            span.className = 'text-xs px-2 py-1 rounded bg-indigo-500 text-white flex items-center gap-1';
+            span.innerHTML = `${member.name} <button data-id="${member.id}" class="detach-member-btn font-bold">×</button>`;
+            membersList.appendChild(span);
+        });
+    }
+
+    document.getElementById('add-member-btn').addEventListener('click', () => {
+        const userId = document.getElementById('member-select').value;
+        if (!userId) return;
+
+        fetch(`/issues/${issueId}/members`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: JSON.stringify({ user_id: userId })
+        })
+        .then(res => res.json())
+        .then(members => renderMembers(members));
+    });
+
+    membersList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('detach-member-btn')) {
+            const userId = e.target.dataset.id;
+            fetch(`/issues/${issueId}/members/${userId}`, {
+                method: 'DELETE',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
+            })
+            .then(res => res.json())
+            .then(members => renderMembers(members));
+        }
+    });
+
+    renderMembers(@json($issue->members));
 
     // ---------- KOMENTET ----------
     const commentsList = document.getElementById('comments-list');

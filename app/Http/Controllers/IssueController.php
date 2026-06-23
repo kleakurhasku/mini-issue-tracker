@@ -6,6 +6,7 @@ use App\Http\Requests\IssueRequest;
 use App\Models\Issue;
 use App\Models\Project;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,9 +62,10 @@ class IssueController extends Controller
 
     public function show(Issue $issue)
     {
-        $issue->load(['project', 'tags', 'comments']);
+        $issue->load(['project', 'tags', 'comments', 'members']);
         $allTags = Tag::orderBy('name')->get();
-        return view('issues.show', compact('issue', 'allTags'));
+        $allUsers = User::orderBy('name')->get();
+        return view('issues.show', compact('issue', 'allTags', 'allUsers'));
     }
 
     public function edit(Issue $issue)
@@ -99,7 +101,19 @@ class IssueController extends Controller
         return response()->json($issue->tags()->orderBy('name')->get());
     }
 
-   
+    public function attachMember(Request $request, Issue $issue)
+    {
+        $request->validate(['user_id' => 'required|exists:users,id']);
+        $issue->members()->syncWithoutDetaching([$request->user_id]);
+        return response()->json($issue->members()->orderBy('name')->get());
+    }
+
+    public function detachMember(Issue $issue, User $user)
+    {
+        $issue->members()->detach($user->id);
+        return response()->json($issue->members()->orderBy('name')->get());
+    }
+
     public function comments(Issue $issue)
     {
         return response()->json(

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,5 +30,10 @@ class Issue extends Model
     public function tags()           // Issue ka shumë tags (many-to-many)
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function members()        // Issue ka shumë users (many-to-many)
+    {
+        return $this->belongsToMany(User::class, 'issue_user')->withTimestamps();
     }
 }
