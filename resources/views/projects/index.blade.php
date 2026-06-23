@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="flex justify-between items-center mb-4">
-    <h1 class="text-2xl font-bold">Projektet</h1>
-    <a href="{{ route('projects.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded">+ Projekt i ri</a>
+    <h1 class="text-2xl font-bold">Projects</h1>
+    <a href="{{ route('projects.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded">+ New Project</a>
 </div>
 
 <div class="bg-white rounded shadow divide-y">
@@ -17,20 +17,20 @@
             </div>
             <div class="flex gap-2">
                 @can('update', $project)
-                    <a href="{{ route('projects.edit', $project) }}" class="text-blue-600">Edito</a>
+                    <a href="{{ route('projects.edit', $project) }}" class="text-blue-600">Edit</a>
                 @endcan
                 @can('delete', $project)
                     <form action="{{ route('projects.destroy', $project) }}" method="POST"
-                          onsubmit="return confirm('A je i sigurt?')">
+                          onsubmit="return confirm('Are you sure?')">
                         @csrf
                         @method('DELETE')
-                        <button class="text-red-600">Fshi</button>
+                        <button class="text-red-600">Delete</button>
                     </form>
                 @endcan
             </div>
         </div>
     @empty
-        <p class="p-4 text-gray-500">Ende s'ka projekte.</p>
+        <p class="p-4 text-gray-500">No projects yet.</p>
     @endforelse
 </div>
 @endsection

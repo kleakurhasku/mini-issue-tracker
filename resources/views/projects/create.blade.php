@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<h1 class="text-2xl font-bold mb-4">Projekt i ri</h1>
+<h1 class="text-2xl font-bold mb-4">New Project</h1>
 
 <form action="{{ route('projects.store') }}" method="POST" class="bg-white p-6 rounded shadow space-y-4">
     @csrf

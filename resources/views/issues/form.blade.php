@@ -1,7 +1,7 @@
 @php $issue = $issue ?? null; @endphp
 
 <div>
-    <label class="block text-sm font-medium">Projekti</label>
+    <label class="block text-sm font-medium">Project</label>
     <select name="project_id" class="border rounded w-full px-3 py-2">
         @foreach ($projects as $project)
             <option value="{{ $project->id }}" @selected(old('project_id', $issue->project_id ?? '') == $project->id)>
@@ -13,14 +13,14 @@
 </div>
 
 <div>
-    <label class="block text-sm font-medium">Titulli</label>
+    <label class="block text-sm font-medium">Title</label>
     <input type="text" name="title" value="{{ old('title', $issue->title ?? '') }}"
            class="border rounded w-full px-3 py-2">
     @error('title') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
 </div>
 
 <div>
-    <label class="block text-sm font-medium">Përshkrimi</label>
+    <label class="block text-sm font-medium">Description</label>
     <textarea name="description" class="border rounded w-full px-3 py-2">{{ old('description', $issue->description ?? '') }}</textarea>
     @error('description') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
 </div>
@@ -43,7 +43,7 @@
         </select>
     </div>
     <div class="flex-1">
-        <label class="block text-sm font-medium">Afati</label>
+        <label class="block text-sm font-medium">Due date</label>
         <input type="date" name="due_date"
                value="{{ old('due_date', isset($issue->due_date) ? $issue->due_date->format('Y-m-d') : '') }}"
                class="border rounded w-full px-3 py-2">

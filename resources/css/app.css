@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-image: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 24%),
+                      radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.12), transparent 20%);
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white/95 border border-slate-200/70 shadow-xl shadow-slate-900/10 rounded-3xl backdrop-blur;
+  }
+
+  .primary-btn {
+    @apply inline-flex items-center justify-center rounded-full bg-indigo-600 text-white px-5 py-2.5 font-semibold shadow-lg shadow-indigo-500/20 transition duration-200 hover:bg-indigo-700;
+  }
+
+  .secondary-btn {
+    @apply inline-flex items-center justify-center rounded-full bg-white text-slate-700 border border-slate-200 px-4 py-2 transition duration-200 hover:bg-slate-50;
+  }
+}

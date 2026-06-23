@@ -3,14 +3,14 @@
 @section('content')
 <div class="flex justify-between items-center mb-4">
     <h1 class="text-2xl font-bold">{{ $project->name }}</h1>
-    <a href="{{ route('projects.index') }}" class="text-indigo-600">← Kthehu te projektet</a>
+    <a href="{{ route('projects.index') }}" class="text-indigo-600">← Back to projects</a>
 </div>
 
 <div class="bg-white rounded shadow p-6 mb-6">
-    <p class="text-gray-700 mb-3">{{ $project->description ?? 'Pa përshkrim.' }}</p>
+    <p class="text-gray-700 mb-3">{{ $project->description ?? 'No description provided.' }}</p>
     <div class="flex gap-6 text-sm text-gray-500">
-        <span>Fillimi: {{ $project->start_date?->format('d/m/Y') ?? '—' }}</span>
-        <span>Afati: {{ $project->deadline?->format('d/m/Y') ?? '—' }}</span>
+        <span>Start date: {{ $project->start_date?->format('d/m/Y') ?? '—' }}</span>
+        <span>Due date: {{ $project->deadline?->format('d/m/Y') ?? '—' }}</span>
     </div>
 </div>
 
@@ -38,7 +38,7 @@
             @endif
         </div>
     @empty
-        <p class="p-4 text-gray-500">Ky projekt s'ka ende issue.</p>
+        <p class="p-4 text-gray-500">This project has no issues yet.</p>
     @endforelse
 </div>
 @endsection

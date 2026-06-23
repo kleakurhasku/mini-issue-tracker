@@ -1,75 +1,96 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-between items-center mb-4">
-    <h1 class="text-2xl font-bold">{{ $issue->title }}</h1>
-    <a href="{{ route('issues.index') }}" class="text-indigo-600">← Kthehu te issues</a>
+<div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6">
+    <div>
+        <span class="text-xs uppercase tracking-[0.24em] text-sky-600">Issue Details</span>
+        <h1 class="mt-2 text-3xl font-semibold text-slate-900">{{ $issue->title }}</h1>
+    </div>
+    <a href="{{ route('issues.index') }}" class="text-sky-700 hover:text-sky-900 font-medium">← Back to issues</a>
 </div>
 
-{{-- Detajet --}}
-<div class="bg-white rounded shadow p-6 mb-6">
-    <p class="text-gray-700 mb-3">{{ $issue->description ?? 'Pa përshkrim.' }}</p>
-    <div class="flex gap-6 text-sm text-gray-500">
-        <span>Projekti: {{ $issue->project->name }}</span>
-        <span>Status: {{ $issue->status }}</span>
-        <span>Priority: {{ $issue->priority }}</span>
-        <span>Afati: {{ $issue->due_date?->format('d/m/Y') ?? '—' }}</span>
+{{-- Details --}}
+<div class="card p-6 mb-6">
+    <p class="text-slate-700 leading-7 mb-5">{{ $issue->description ?? 'No description provided.' }}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-slate-500">
+        <div class="space-y-1">
+            <span class="block text-slate-400">Project</span>
+            <p class="font-medium text-slate-900">{{ $issue->project->name }}</p>
+        </div>
+        <div class="space-y-1">
+            <span class="block text-slate-400">Status</span>
+            <p class="font-medium text-slate-900">{{ $issue->status }}</p>
+        </div>
+        <div class="space-y-1">
+            <span class="block text-slate-400">Priority</span>
+            <p class="font-medium text-slate-900">{{ $issue->priority }}</p>
+        </div>
+        <div class="space-y-1">
+            <span class="block text-slate-400">Due date</span>
+            <p class="font-medium text-slate-900">{{ $issue->due_date?->format('d/m/Y') ?? '—' }}</p>
+        </div>
     </div>
 </div>
 
 {{-- TAGS (me AJAX) --}}
-<div class="bg-white rounded shadow p-6 mb-6">
-    <h2 class="text-lg font-semibold mb-3">Tags</h2>
+<div class="card p-6 mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <h2 class="text-xl font-semibold text-slate-900">Tags</h2>
+        <p class="text-sm text-slate-500">Manage the tags associated with this issue.</p>
+    </div>
 
     <div id="tags-list" class="flex flex-wrap gap-2 mb-4"></div>
 
-    <div class="flex gap-2">
-        <select id="tag-select" class="border rounded px-3 py-2">
-            <option value="">Zgjidh një tag...</option>
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <select id="tag-select" class="border border-slate-300 rounded-xl px-4 py-2 bg-white text-slate-700 w-full sm:w-auto">
+            <option value="">Select a tag...</option>
             @foreach ($allTags as $tag)
                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
             @endforeach
         </select>
-        <button id="add-tag-btn" class="bg-indigo-600 text-white px-4 py-2 rounded">Shto tag</button>
+        <button id="add-tag-btn" class="primary-btn">Add tag</button>
     </div>
 </div>
 
-<div class="bg-white rounded shadow p-6 mb-6">
-    <h2 class="text-lg font-semibold mb-3">Anëtarët e Issue</h2>
+<div class="card p-6 mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <h2 class="text-xl font-semibold text-slate-900">Issue members</h2>
+        <p class="text-sm text-slate-500">Add or remove team members.</p>
+    </div>
 
     <div id="members-list" class="flex flex-wrap gap-2 mb-4"></div>
 
-    <div class="flex gap-2">
-        <select id="member-select" class="border rounded px-3 py-2">
-            <option value="">Zgjidh një anëtar...</option>
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <select id="member-select" class="border border-slate-300 rounded-xl px-4 py-2 bg-white text-slate-700 w-full sm:w-auto">
+            <option value="">Select a member...</option>
             @foreach ($allUsers as $user)
                 <option value="{{ $user->id }}">{{ $user->name }}</option>
             @endforeach
         </select>
-        <button id="add-member-btn" class="bg-indigo-600 text-white px-4 py-2 rounded">Shto anëtar</button>
+        <button id="add-member-btn" class="primary-btn">Add member</button>
     </div>
 </div>
 
-{{-- KOMENTET (me AJAX) --}}
-<div class="bg-white rounded shadow p-6">
-    <h2 class="text-lg font-semibold mb-3">Komentet</h2>
+{{-- COMMENTS (with AJAX) --}}
+<div class="card p-6">
+    <h2 class="text-xl font-semibold mb-4 text-slate-900">Comments</h2>
 
-    {{-- Forma për koment të ri --}}
-    <div class="mb-4 space-y-2">
+    {{-- New comment form --}}
+    <div class="mb-6 space-y-3">
         <input type="text" id="comment-author" placeholder="Emri juaj"
-               class="border rounded w-full px-3 py-2">
+               class="border border-slate-300 rounded-2xl w-full px-4 py-3 focus:border-sky-400 focus:ring-2 focus:ring-sky-200 outline-none transition" />
         <p id="author-error" class="text-red-600 text-sm hidden"></p>
 
-        <textarea id="comment-body" placeholder="Shkruaj një koment..."
-                  class="border rounded w-full px-3 py-2"></textarea>
+        <textarea id="comment-body" placeholder="Write a comment..."
+                  class="border border-slate-300 rounded-2xl w-full px-4 py-3 min-h-[120px] focus:border-sky-400 focus:ring-2 focus:ring-sky-200 outline-none transition"></textarea>
         <p id="body-error" class="text-red-600 text-sm hidden"></p>
 
-        <button id="add-comment-btn" class="bg-indigo-600 text-white px-4 py-2 rounded">Shto koment</button>
+        <button id="add-comment-btn" class="primary-btn">Add comment</button>
     </div>
 
     {{-- Lista e komenteve --}}
-    <div id="comments-list" class="space-y-3"></div>
-    <button id="load-more-btn" class="mt-4 text-indigo-600 hidden">Ngarko më shumë</button>
+    <div id="comments-list" class="space-y-4"></div>
+    <button id="load-more-btn" class="mt-5 text-sky-600 font-medium hidden">Load more</button>
 </div>
 
 {{-- JavaScript-i për AJAX --}}
@@ -83,14 +104,14 @@
     function renderTags(tags) {
         tagsList.innerHTML = '';
         if (tags.length === 0) {
-            tagsList.innerHTML = '<span class="text-gray-400 text-sm">Pa tags.</span>';
+            tagsList.innerHTML = '<span class="text-gray-400 text-sm">No tags.</span>';
             return;
         }
         tags.forEach(tag => {
             const span = document.createElement('span');
-            span.className = 'text-xs px-2 py-1 rounded text-white flex items-center gap-1';
-            span.style.backgroundColor = tag.color || '#6b7280';
-            span.innerHTML = `${tag.name} <button data-id="${tag.id}" class="detach-btn font-bold">×</button>`;
+            span.className = 'text-xs px-3 py-1 rounded-full text-white flex items-center gap-2';
+            span.style.backgroundColor = tag.color || '#4f46e5';
+            span.innerHTML = `${tag.name} <button data-id="${tag.id}" class="detach-btn font-bold hover:text-slate-200">×</button>`;
             tagsList.appendChild(span);
         });
     }
@@ -128,13 +149,13 @@
     function renderMembers(members) {
         membersList.innerHTML = '';
         if (members.length === 0) {
-            membersList.innerHTML = '<span class="text-gray-400 text-sm">Pa anëtarë.</span>';
+            membersList.innerHTML = '<span class="text-gray-400 text-sm">No members.</span>';
             return;
         }
         members.forEach(member => {
             const span = document.createElement('span');
-            span.className = 'text-xs px-2 py-1 rounded bg-indigo-500 text-white flex items-center gap-1';
-            span.innerHTML = `${member.name} <button data-id="${member.id}" class="detach-member-btn font-bold">×</button>`;
+            span.className = 'text-xs px-3 py-1 rounded-full bg-slate-900 text-white flex items-center gap-2';
+            span.innerHTML = `${member.name} <button data-id="${member.id}" class="detach-member-btn font-bold hover:text-slate-200">×</button>`;
             membersList.appendChild(span);
         });
     }
@@ -173,8 +194,8 @@
 
     function commentElement(c) {
         const div = document.createElement('div');
-        div.className = 'border rounded p-3';
-        div.innerHTML = `<p class="font-medium">${c.author_name}</p><p class="text-gray-700">${c.body}</p>`;
+        div.className = 'border border-slate-200 rounded-3xl bg-slate-50 p-4 shadow-sm';
+        div.innerHTML = `<p class="font-semibold text-slate-900 mb-2">${c.author_name}</p><p class="text-slate-700 leading-7">${c.body}</p>`;
         return div;
     }
 
