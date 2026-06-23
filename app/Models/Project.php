@@ -9,16 +9,21 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'start_date', 'deadline'];
+    protected $fillable = ['user_id', 'name', 'description', 'start_date', 'deadline'];
 
     protected $casts = [
         'start_date' => 'date',
         'deadline' => 'date',
     ];
 
-    // Një projekt ka shumë issue
     public function issues()
     {
         return $this->hasMany(Issue::class);
+    }
+
+    // Pronari i projektit
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

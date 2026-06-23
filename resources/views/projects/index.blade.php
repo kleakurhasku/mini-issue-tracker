@@ -16,13 +16,17 @@
                 <p class="text-sm text-gray-500">{{ $project->issues_count }} issue</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('projects.edit', $project) }}" class="text-blue-600">Edito</a>
-                <form action="{{ route('projects.destroy', $project) }}" method="POST"
-                      onsubmit="return confirm('A je i sigurt?')">
-                    @csrf
-                    @method('DELETE')
-                    <button class="text-red-600">Fshi</button>
-                </form>
+                @can('update', $project)
+                    <a href="{{ route('projects.edit', $project) }}" class="text-blue-600">Edito</a>
+                @endcan
+                @can('delete', $project)
+                    <form action="{{ route('projects.destroy', $project) }}" method="POST"
+                          onsubmit="return confirm('A je i sigurt?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="text-red-600">Fshi</button>
+                    </form>
+                @endcan
             </div>
         </div>
     @empty
