@@ -27,8 +27,22 @@ class IssueController extends Controller
             $query->whereHas('tags', fn ($q) => $q->where('tags.id', $request->tag));
         }
 
+        
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
         $issues = $query->latest()->get();
         $tags = Tag::orderBy('name')->get();
+
+       
+        if ($request->ajax()) {
+            return response()->json($issues);
+        }
 
         return view('issues.index', compact('issues', 'tags'));
     }
@@ -70,9 +84,7 @@ class IssueController extends Controller
         return redirect()->route('issues.index')->with('success', 'Issue u fshi.');
     }
 
-    // === AJAX: Tags ===
-
-    // Shto një tag te issue-ja
+   
     public function attachTag(Request $request, Issue $issue)
     {
         $request->validate(['tag_id' => 'required|exists:tags,id']);
@@ -80,16 +92,14 @@ class IssueController extends Controller
         return response()->json($issue->tags()->orderBy('name')->get());
     }
 
-    // Hiq një tag nga issue-ja
+  
     public function detachTag(Issue $issue, Tag $tag)
     {
         $issue->tags()->detach($tag->id);
         return response()->json($issue->tags()->orderBy('name')->get());
     }
 
-    // === AJAX: Comments ===
-
-    // Ngarko komentet (të paginuara)
+   
     public function comments(Issue $issue)
     {
         return response()->json(
@@ -97,7 +107,7 @@ class IssueController extends Controller
         );
     }
 
-    // Shto një koment
+   
     public function addComment(Request $request, Issue $issue)
     {
         $validator = Validator::make($request->all(), [
