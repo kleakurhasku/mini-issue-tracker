@@ -39,7 +39,17 @@
         <p class="text-sm text-slate-500">Manage the tags associated with this issue.</p>
     </div>
 
-    <div id="tags-list" class="flex flex-wrap gap-2 mb-4"></div>
+    <div id="tags-list" class="flex flex-wrap gap-2 mb-4">
+        @forelse ($issue->tags as $tag)
+            <span class="text-xs px-3 py-1 rounded-full text-white flex items-center gap-2"
+                  style="background-color: {{ $tag->color ?? '#4f46e5' }}">
+                {{ $tag->name }}
+                <button data-id="{{ $tag->id }}" class="detach-btn font-bold hover:text-slate-200">×</button>
+            </span>
+        @empty
+            <span class="text-gray-400 text-sm">No tags.</span>
+        @endforelse
+    </div>
 
     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
         <select id="tag-select" class="border border-slate-300 rounded-xl px-4 h-10 bg-white text-slate-700 w-full sm:w-auto min-w-[160px]">
@@ -71,7 +81,7 @@
             @endforeach
         </select>
         <button id="add-member-btn" class="inline-flex items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 font-semibold shadow transition">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/><path d="M2 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/><path d="M2 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/></svg>
             Add member
         </button>
     </div>
@@ -83,8 +93,8 @@
 
     {{-- New comment form --}}
     <div class="mb-6 space-y-3">
-         <input type="text" id="comment-author" placeholder="Your name"
-             class="border border-slate-300 rounded-2xl w-full px-4 py-3 focus:border-sky-400 focus:ring-2 focus:ring-sky-200 outline-none transition" />
+        <input type="text" id="comment-author" placeholder="Your name"
+               class="border border-slate-300 rounded-2xl w-full px-4 py-3 focus:border-sky-400 focus:ring-2 focus:ring-sky-200 outline-none transition" />
         <p id="author-error" class="text-red-600 text-sm hidden"></p>
 
         <textarea id="comment-body" placeholder="Write a comment..."
