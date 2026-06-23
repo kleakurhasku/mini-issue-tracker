@@ -83,8 +83,8 @@
 
     {{-- New comment form --}}
     <div class="mb-6 space-y-3">
-        <input type="text" id="comment-author" placeholder="Emri juaj"
-               class="border border-slate-300 rounded-2xl w-full px-4 py-3 focus:border-sky-400 focus:ring-2 focus:ring-sky-200 outline-none transition" />
+         <input type="text" id="comment-author" placeholder="Your name"
+             class="border border-slate-300 rounded-2xl w-full px-4 py-3 focus:border-sky-400 focus:ring-2 focus:ring-sky-200 outline-none transition" />
         <p id="author-error" class="text-red-600 text-sm hidden"></p>
 
         <textarea id="comment-body" placeholder="Write a comment..."
