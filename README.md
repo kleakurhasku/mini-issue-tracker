@@ -8,6 +8,8 @@ A small Laravel application where a team can manage projects, issues, tags, and 
 - Issues: Full CRUD with filters by status, priority, and tag.
 - Tags: Attach and detach tags via AJAX (no page reload).
 - Comments: Load comments via AJAX (paginated) and add new ones with validation.
+- Authentication via Laravel Breeze.
+- Authorization: only a project owner can edit or delete their projects (Policies).
 
 ## Tech Stack
 
@@ -28,3 +30,12 @@ A small Laravel application where a team can manage projects, issues, tags, and 
 7. php artisan serve
 
 Then open http://127.0.0.1:8000
+
+## Demo Login
+
+Two demo users are seeded. Use either to log in:
+
+- Email: klea.kurhasku@gmail.com — Password: password
+- Email: eraf@gmail.com — Password: password
+
+Each user owns some projects. A user can only edit or delete their own projects.
