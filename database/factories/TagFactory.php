@@ -9,7 +9,20 @@ class TagFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->word(),
+            'name' => fake()->unique()->randomElement([
+                'bug',
+                'feature',
+                'urgent',
+                'frontend',
+                'backend',
+                'documentation',
+                'enhancement',
+                'design',
+                'security',
+                'performance',
+                'database',
+                'api',
+            ]),
             'color' => fake()->hexColor(),
         ];
     }
