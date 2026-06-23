@@ -12,6 +12,7 @@
         <div class="max-w-5xl mx-auto px-4 py-3 flex gap-6">
             <a href="{{ route('projects.index') }}" class="font-bold text-indigo-600">Issue Tracker</a>
             <a href="{{ route('projects.index') }}" class="hover:text-indigo-600">Projektet</a>
+            <a href="{{ route('issues.index') }}" class="hover:text-indigo-600">Issues</a>
         </div>
     </nav>
 
