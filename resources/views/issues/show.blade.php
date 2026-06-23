@@ -42,13 +42,16 @@
     <div id="tags-list" class="flex flex-wrap gap-2 mb-4"></div>
 
     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-        <select id="tag-select" class="border border-slate-300 rounded-xl px-4 py-2 bg-white text-slate-700 w-full sm:w-auto">
+        <select id="tag-select" class="border border-slate-300 rounded-xl px-4 h-10 bg-white text-slate-700 w-full sm:w-auto min-w-[160px]">
             <option value="">Select a tag...</option>
             @foreach ($allTags as $tag)
                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
             @endforeach
         </select>
-        <button id="add-tag-btn" class="primary-btn">Add tag</button>
+        <button id="add-tag-btn" class="inline-flex items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 font-semibold shadow transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L11 3 3 11l8.59 8.59a2 2 0 002.82 0L20.59 16.23a2 2 0 000-2.82z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+            Add tag
+        </button>
     </div>
 </div>
 
@@ -61,13 +64,16 @@
     <div id="members-list" class="flex flex-wrap gap-2 mb-4"></div>
 
     <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-        <select id="member-select" class="border border-slate-300 rounded-xl px-4 py-2 bg-white text-slate-700 w-full sm:w-auto">
+        <select id="member-select" class="border border-slate-300 rounded-xl px-4 h-10 bg-white text-slate-700 w-full sm:w-auto min-w-[160px]">
             <option value="">Select a member...</option>
             @foreach ($allUsers as $user)
                 <option value="{{ $user->id }}">{{ $user->name }}</option>
             @endforeach
         </select>
-        <button id="add-member-btn" class="primary-btn">Add member</button>
+        <button id="add-member-btn" class="inline-flex items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 font-semibold shadow transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/><path d="M2 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
+            Add member
+        </button>
     </div>
 </div>
 
@@ -85,7 +91,10 @@
                   class="border border-slate-300 rounded-2xl w-full px-4 py-3 min-h-[120px] focus:border-sky-400 focus:ring-2 focus:ring-sky-200 outline-none transition"></textarea>
         <p id="body-error" class="text-red-600 text-sm hidden"></p>
 
-        <button id="add-comment-btn" class="primary-btn">Add comment</button>
+        <button id="add-comment-btn" class="inline-flex items-center justify-center rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 font-semibold shadow transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Add comment
+        </button>
     </div>
 
     {{-- Lista e komenteve --}}
